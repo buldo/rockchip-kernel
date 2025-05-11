@@ -1061,7 +1061,7 @@ static void fiq_debugger_fiq(struct fiq_glue_handler *h,
 {
 	struct fiq_debugger_state *state =
 		container_of(h, struct fiq_debugger_state, handler);
-	unsigned int this_cpu = THREAD_INFO(svc_sp)->cpu;
+	int this_cpu = THREAD_INFO(svc_sp)->cpu;
 	bool need_irq;
 
 	need_irq = fiq_debugger_handle_uart_interrupt(state, this_cpu, regs,
