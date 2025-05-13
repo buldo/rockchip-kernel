@@ -785,7 +785,7 @@ static int mis5001_g_mbus_config(struct v4l2_subdev *sd,
 				unsigned int pad_id,
 				struct v4l2_mbus_config *config)
 {
-	struct mis5001 *mis5001 = to_mis5001(sd);
+	// struct mis5001 *mis5001 = to_mis5001(sd);
 	// const struct mis5001_mode *mode = mis5001->cur_mode;
 	// 
 	// u32 val = 1 << (MIS5001_LANES - 1) |
@@ -1584,7 +1584,7 @@ static int mis5001_probe(struct i2c_client *client,
 	snprintf(sd->name, sizeof(sd->name), "m%02d_%s_%s %s",
 		 mis5001->module_index, facing,
 		 MIS5001_NAME, dev_name(sd->dev));
-	ret = v4l2_async_register_subdev_sensor_common(sd);
+	ret = v4l2_async_register_subdev_sensor(sd);
 	if (ret) {
 		dev_err(dev, "v4l2 async register subdev failed\n");
 		goto err_clean_entity;
