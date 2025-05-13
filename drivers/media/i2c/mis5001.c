@@ -35,7 +35,6 @@
 
 /* Clock non-continuous mode support. */
 #define V4L2_MBUS_CSI2_CONTINUOUS_CLOCK		BIT(8)
-#define V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK	BIT(9)
 
 #define DRIVER_VERSION			KERNEL_VERSION(0, 0x01, 0x02)
 
@@ -788,17 +787,18 @@ static int mis5001_g_mbus_config(struct v4l2_subdev *sd,
 {
 	struct mis5001 *mis5001 = to_mis5001(sd);
 	const struct mis5001_mode *mode = mis5001->cur_mode;
-	u32 val = 1 << (MIS5001_LANES - 1) |
-		V4L2_MBUS_CSI2_CHANNEL_0 |
-		V4L2_MBUS_CSI2_CONTINUOUS_CLOCK;
+	// 
+	// u32 val = 1 << (MIS5001_LANES - 1) |
+	// 	V4L2_MBUS_CSI2_CHANNEL_0 |
+	// 	V4L2_MBUS_CSI2_CONTINUOUS_CLOCK;
 
-	if (mode->hdr_mode != NO_HDR)
-		val |= V4L2_MBUS_CSI2_CHANNEL_1;
-	if (mode->hdr_mode == HDR_X3)
-		val |= V4L2_MBUS_CSI2_CHANNEL_2;
+	// if (mode->hdr_mode != NO_HDR)
+	// 	val |= V4L2_MBUS_CSI2_CHANNEL_1;
+	// if (mode->hdr_mode == HDR_X3)
+	// 	val |= V4L2_MBUS_CSI2_CHANNEL_2;
 
 	config->type = V4L2_MBUS_CSI2_DPHY;
-	config->flags = val;
+	config->bus.mipi_csi2.num_data_lanes = MIS5001_LANES
 
 	return 0;
 }
@@ -1161,7 +1161,7 @@ static int mis5001_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 {
 	struct mis5001 *mis5001 = to_mis5001(sd);
 	struct v4l2_mbus_framefmt *try_fmt =
-				v4l2_subdev_get_try_format(sd, fh->pad, 0);
+				v4l2_subdev_get_try_format(sd, fh->state, 0);
 	const struct mis5001_mode *def_mode = &supported_modes[0];
 
 	mutex_lock(&mis5001->mutex);
@@ -1179,7 +1179,7 @@ static int mis5001_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 #endif
 
 static int mis5001_enum_frame_interval(struct v4l2_subdev *sd,
-				       struct v4l2_subdev_pad_config *cfg,
+				       struct v4l2_subdev_state *sd_state,
 				       struct v4l2_subdev_frame_interval_enum *fie)
 {
 	if (fie->index >= ARRAY_SIZE(supported_modes))
@@ -1610,7 +1610,7 @@ err_destroy_mutex:
 	return ret;
 }
 
-static int mis5001_remove(struct i2c_client *client)
+static void mis5001_remove(struct i2c_client *client)
 {
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct mis5001 *mis5001 = to_mis5001(sd);
