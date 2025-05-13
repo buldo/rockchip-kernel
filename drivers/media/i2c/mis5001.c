@@ -27,6 +27,16 @@
 #include <media/v4l2-subdev.h>
 #include <linux/pinctrl/consumer.h>
 
+/* CSI-2 Virtual Channel identifiers. */
+#define V4L2_MBUS_CSI2_CHANNEL_0		BIT(4)
+#define V4L2_MBUS_CSI2_CHANNEL_1		BIT(5)
+#define V4L2_MBUS_CSI2_CHANNEL_2		BIT(6)
+#define V4L2_MBUS_CSI2_CHANNEL_3		BIT(7)
+
+/* Clock non-continuous mode support. */
+#define V4L2_MBUS_CSI2_CONTINUOUS_CLOCK		BIT(8)
+#define V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK	BIT(9)
+
 #define DRIVER_VERSION			KERNEL_VERSION(0, 0x01, 0x02)
 
 #ifndef V4L2_CID_DIGITAL_GAIN
@@ -641,7 +651,7 @@ mis5001_find_best_fit(struct v4l2_subdev_format *fmt)
 }
 
 static int mis5001_set_fmt(struct v4l2_subdev *sd,
-			   struct v4l2_subdev_pad_config *cfg,
+			   struct v4l2_subdev_state *sd_state,
 			   struct v4l2_subdev_format *fmt)
 {
 	struct mis5001 *mis5001 = to_mis5001(sd);
@@ -657,7 +667,7 @@ static int mis5001_set_fmt(struct v4l2_subdev *sd,
 	fmt->format.field = V4L2_FIELD_NONE;
 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
 #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
-		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
+		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
 #else
 		mutex_unlock(&mis5001->mutex);
 		return -ENOTTY;
@@ -680,7 +690,7 @@ static int mis5001_set_fmt(struct v4l2_subdev *sd,
 }
 
 static int mis5001_get_fmt(struct v4l2_subdev *sd,
-			   struct v4l2_subdev_pad_config *cfg,
+			   struct v4l2_subdev_state *sd_state,
 			   struct v4l2_subdev_format *fmt)
 {
 	struct mis5001 *mis5001 = to_mis5001(sd);
@@ -689,7 +699,7 @@ static int mis5001_get_fmt(struct v4l2_subdev *sd,
 	mutex_lock(&mis5001->mutex);
 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
 #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
-		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
+		fmt->format = *v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
 #else
 		mutex_unlock(&mis5001->mutex);
 		return -ENOTTY;
@@ -711,7 +721,7 @@ static int mis5001_get_fmt(struct v4l2_subdev *sd,
 }
 
 static int mis5001_enum_mbus_code(struct v4l2_subdev *sd,
-				  struct v4l2_subdev_pad_config *cfg,
+				  struct v4l2_subdev_state *sd_state,
 				  struct v4l2_subdev_mbus_code_enum *code)
 {
 	struct mis5001 *mis5001 = to_mis5001(sd);
@@ -724,7 +734,7 @@ static int mis5001_enum_mbus_code(struct v4l2_subdev *sd,
 }
 
 static int mis5001_enum_frame_sizes(struct v4l2_subdev *sd,
-				    struct v4l2_subdev_pad_config *cfg,
+				    struct v4l2_subdev_state *sd_state,
 				    struct v4l2_subdev_frame_size_enum *fse)
 {
 	if (fse->index >= ARRAY_SIZE(supported_modes))
