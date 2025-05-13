@@ -621,6 +621,40 @@ static const u16 trans_tbl_jpege_osd[] = {
 	117, 118, 126, 127, 135, 136, 144, 145,
 };
 
+/* rv1106 trans table */
+static const u16 trans_tbl_h264e_rv1106[] = {
+	7, 8, 9, 10, 11, 12, 13, 14,
+	15, 16, 17, 18, 19, 20, 21, 22, 23,
+	/* jpege */
+	100, 101, 102, 103,
+};
+
+static const u16 trans_tbl_h264e_rv1106_osd[] = {
+	3, 4, 12, 13, 21, 22, 30, 31,
+	39, 40, 48, 49, 57, 58, 66, 67,
+};
+
+static const u16 trans_tbl_h265e_rv1106[] = {
+	7, 8, 9, 10, 11, 12, 13, 14,
+	15, 16, 17, 18, 19, 20, 21, 22, 23,
+	/* jpege */
+	100, 101, 102, 103,
+};
+
+static const u16 trans_tbl_h265e_rv1106_osd[] = {
+	3, 4, 12, 13, 21, 22, 30, 31,
+	39, 40, 48, 49, 57, 58, 66, 67,
+};
+
+static const u16 trans_tbl_jpege_rv1106[] = {
+	100, 101, 102, 103,
+};
+
+static const u16 trans_tbl_jpege_osd_rv1106[] = {
+	81, 82, 90, 91, 99, 100, 108, 109,
+	117, 118, 126, 127, 135, 136, 144, 145,
+};
+
 static const u32 rkvenc2_timeout_thd_by_rsl[5][2] = {
 	{1920*1088,	50},
 	{2560*1440,	100},
@@ -672,6 +706,33 @@ static struct mpp_trans_info trans_rkvenc_540c[] = {
 	[RKVENC_FMT_JPEGE_OSD] = {
 		.count = ARRAY_SIZE(trans_tbl_jpege_osd),
 		.table = trans_tbl_jpege_osd,
+	},
+};
+
+static struct mpp_trans_info trans_rkvenc_rv1106[] = {
+	[RKVENC_FMT_H264E] = {
+		.count = ARRAY_SIZE(trans_tbl_h264e_rv1106),
+		.table = trans_tbl_h264e_rv1106,
+	},
+	[RKVENC_FMT_H264E_OSD] = {
+		.count = ARRAY_SIZE(trans_tbl_h264e_rv1106_osd),
+		.table = trans_tbl_h264e_rv1106_osd,
+	},
+	[RKVENC_FMT_H265E] = {
+		.count = ARRAY_SIZE(trans_tbl_h265e_rv1106),
+		.table = trans_tbl_h265e_rv1106,
+	},
+	[RKVENC_FMT_H265E_OSD] = {
+		.count = ARRAY_SIZE(trans_tbl_h265e_rv1106_osd),
+		.table = trans_tbl_h265e_rv1106_osd,
+	},
+	[RKVENC_FMT_JPEGE] = {
+		.count = ARRAY_SIZE(trans_tbl_jpege_rv1106),
+		.table = trans_tbl_jpege_rv1106,
+	},
+	[RKVENC_FMT_JPEGE_OSD] = {
+		.count = ARRAY_SIZE(trans_tbl_jpege_osd_rv1106),
+		.table = trans_tbl_jpege_osd_rv1106,
 	},
 };
 
@@ -2508,6 +2569,14 @@ static const struct mpp_dev_var rkvenc_510_data = {
 	.dev_ops = &rkvenc_dev_ops_v2,
 };
 
+static const struct mpp_dev_var rkvenc_rv1106_data = {
+	.device_type = MPP_DEVICE_RKVENC,
+	.hw_info = &rkvenc_540c_hw_info.hw,
+	.trans_info = trans_rkvenc_rv1106,
+	.hw_ops = &rkvenc_hw_ops,
+	.dev_ops = &rkvenc_dev_ops_v2,
+};
+
 static const struct mpp_dev_var rkvenc_ccu_data = {
 	.device_type = MPP_DEVICE_RKVENC,
 	.hw_info = &rkvenc_v2_hw_info.hw,
@@ -2561,6 +2630,12 @@ static const struct of_device_id mpp_rkvenc_dt_match[] = {
 	},
 	{
 		.compatible = "rockchip,rkv-encoder-v2-ccu",
+	},
+#endif
+#ifdef CONFIG_CPU_RV1106
+	{
+		.compatible = "rockchip,rkv-encoder-rv1106",
+		.data = &rkvenc_rv1106_data,
 	},
 #endif
 	{},
