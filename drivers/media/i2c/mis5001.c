@@ -786,7 +786,7 @@ static int mis5001_g_mbus_config(struct v4l2_subdev *sd,
 				struct v4l2_mbus_config *config)
 {
 	struct mis5001 *mis5001 = to_mis5001(sd);
-	const struct mis5001_mode *mode = mis5001->cur_mode;
+	// const struct mis5001_mode *mode = mis5001->cur_mode;
 	// 
 	// u32 val = 1 << (MIS5001_LANES - 1) |
 	// 	V4L2_MBUS_CSI2_CHANNEL_0 |
@@ -798,7 +798,7 @@ static int mis5001_g_mbus_config(struct v4l2_subdev *sd,
 	// 	val |= V4L2_MBUS_CSI2_CHANNEL_2;
 
 	config->type = V4L2_MBUS_CSI2_DPHY;
-	config->bus.mipi_csi2.num_data_lanes = MIS5001_LANES
+	config->bus.mipi_csi2.num_data_lanes = MIS5001_LANES;
 
 	return 0;
 }
@@ -1626,8 +1626,6 @@ static void mis5001_remove(struct i2c_client *client)
 	if (!pm_runtime_status_suspended(&client->dev))
 		__mis5001_power_off(mis5001);
 	pm_runtime_set_suspended(&client->dev);
-
-	return 0;
 }
 
 #if IS_ENABLED(CONFIG_OF)
