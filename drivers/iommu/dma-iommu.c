@@ -13,6 +13,7 @@
 #include <linux/crash_dump.h>
 #include <linux/device.h>
 #include <linux/dma-direct.h>
+#include <linux/dma-iommu.h>
 #include <linux/dma-map-ops.h>
 #include <linux/gfp.h>
 #include <linux/huge_mm.h>
@@ -29,8 +30,6 @@
 #include <linux/swiotlb.h>
 #include <linux/vmalloc.h>
 #include <trace/events/swiotlb.h>
-
-#include "dma-iommu.h"
 
 struct iommu_dma_msi_page {
 	struct list_head	list;

@@ -21,6 +21,7 @@
 #include <linux/acpi_iort.h>
 #include <linux/bitfield.h>
 #include <linux/delay.h>
+#include <linux/dma-iommu.h>
 #include <linux/dma-mapping.h>
 #include <linux/err.h>
 #include <linux/interrupt.h>
@@ -39,7 +40,6 @@
 #include <linux/fsl/mc.h>
 
 #include "arm-smmu.h"
-#include "../../dma-iommu.h"
 
 /*
  * Apparently, some Qualcomm arm64 platforms which appear to expose their SMMU

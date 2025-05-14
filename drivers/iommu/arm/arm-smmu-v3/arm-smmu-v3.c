@@ -14,6 +14,7 @@
 #include <linux/bitops.h>
 #include <linux/crash_dump.h>
 #include <linux/delay.h>
+#include <linux/dma-iommu.h>
 #include <linux/err.h>
 #include <linux/interrupt.h>
 #include <linux/io-pgtable.h>
@@ -28,7 +29,6 @@
 #include <linux/platform_device.h>
 
 #include "arm-smmu-v3.h"
-#include "../../dma-iommu.h"
 #include "../../iommu-sva-lib.h"
 
 static bool disable_bypass = true;
