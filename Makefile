@@ -447,7 +447,8 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -Wno-format-security \
 		   -std=gnu89 -Wno-array-bounds -Wno-array-compare \
 		   -Wno-maybe-uninitialized -Wno-address -Wno-misleading-indentation \
-		   -Wno-stringop-overread -Wno-dangling-pointer
+		   -Wno-stringop-overread -Wno-dangling-pointer -Wno-restrict \
+		   -Wno-array-parameter -Wno-int-to-pointer-cast
 KBUILD_CPPFLAGS := -D__KERNEL__
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
