@@ -16,7 +16,7 @@
 #define cand	cmpand
 #define nop8	nop; nop; nop; nop; nop; nop; nop; nop
 
-		.section ".start", #alloc, #execinstr
+		.section ".start", "a", #execinstr
 		.text
 start:
 		.type	start,#function
