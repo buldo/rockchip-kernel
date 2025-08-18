@@ -149,7 +149,7 @@ __csum_partial_copy_start:
 
 /* Work around cpp -rob */
 #define ALLOC "a"
-#define EXECINSTR #execinstr
+#define EXECINSTR "ax"
 #define EX(x,y,a,b)				\
 98:     x,y;                                    \
         .section .fixup,ALLOC,EXECINSTR;	\

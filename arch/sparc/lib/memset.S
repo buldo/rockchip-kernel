@@ -14,7 +14,7 @@
 
 /* Work around cpp -rob */
 #define ALLOC "a"
-#define EXECINSTR #execinstr
+#define EXECINSTR "ax"
 #define EX(x,y,a,b) 				\
 98: 	x,y;					\
 	.section .fixup,ALLOC,EXECINSTR;	\
@@ -183,7 +183,7 @@ __bzero:
 	 clr	%o0
 __memset_end:
 
-	.section .fixup,"a",#execinstr
+	.section .fixup,"a","ax"
 	.align	4
 20:
 	cmp	%g2, 8

@@ -114,7 +114,7 @@
 #endif
 		.endm
 
-		.section ".start", "a", #execinstr
+		.section ".start", "a", "ax"
 /*
  * sort out different calling conventions
  */

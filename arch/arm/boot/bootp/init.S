@@ -16,7 +16,7 @@
  *  size immediately following the kernel, we could build this into
  *  a binary blob, and concatenate the zImage using the cat command.
  */
-		.section .start,"a",#execinstr
+		.section .start,"a","ax"
 		.type	_start, #function
 		.globl	_start
 

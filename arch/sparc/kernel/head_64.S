@@ -950,7 +950,7 @@ swapper_4m_tsb:
 prom_tba:	.xword	0
 tlb_type:	.word	0	/* Must NOT end up in BSS */
 EXPORT_SYMBOL(tlb_type)
-	.section	".fixup","a",#execinstr
+	.section	".fixup","a","ax"
 
 ENTRY(__retl_efault)
 	retl

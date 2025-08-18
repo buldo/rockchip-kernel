@@ -499,7 +499,7 @@ in_ea:
 	dbf	%d0,morein
 	rts
 
-	.section .fixup,"a",#execinstr
+	.section .fixup,"a","ax"
 	.even
 1:
 	jbra	fpsp040_die

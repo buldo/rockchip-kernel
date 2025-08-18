@@ -379,7 +379,7 @@ _060_real_access:
 
 
 | Execption handling for movs access to illegal memory
-	.section .fixup,"a",#execinstr
+	.section .fixup,"a","ax"
 	.even
 1:	moveq		#-1,%d1
 	rts

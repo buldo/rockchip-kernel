@@ -20,7 +20,7 @@
 
 /* Work around cpp -rob */
 #define ALLOC "a"
-#define EXECINSTR #execinstr
+#define EXECINSTR "ax"
 #define EX(x,y,a,b) 				\
 98: 	x,y;					\
 	.section .fixup,ALLOC,EXECINSTR;	\
@@ -360,7 +360,7 @@ short_aligned_end:
 	b	copy_user_last7
 	 mov	%o2, %g1
 
-	.section .fixup,"a",#execinstr
+	.section .fixup,"a","ax"
 	.align	4
 97:
 	mov	%o2, %g3

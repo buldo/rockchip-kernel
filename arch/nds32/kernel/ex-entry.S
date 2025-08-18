@@ -142,7 +142,7 @@ common_exception_handler:
 	jral.ton $p0, $p0
 	.endm
 
-	.section	".text.init", "a", #execinstr
+	.section	".text.init", "a", "ax"
 	.global	exception_vector
 exception_vector:
 .rept 6
