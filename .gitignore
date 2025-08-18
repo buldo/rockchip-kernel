@@ -169,3 +169,6 @@ sphinx_*/
 
 # Rust analyzer configuration
 /rust-project.json
+!scripts/module-lto.lds 
+!scripts/module-common.lds
+!arch/arm/kernel/module.lds
