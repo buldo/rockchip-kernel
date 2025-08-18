@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2024 Guangzhou EASY EAI Technology Co., Ltd.
+ */
+
+&u2phy1 {
+	status = "okay";
+	u2phy_host: host-port {
+		status = "okay";
+		phy-supply = <&vcc5v0_host>;
+	};
+};
+
+&usb_host0_ehci {
+	status = "okay";
+};
+
+&usb_host0_ohci {
+	status = "okay";
+};

@@ -1,0 +1,222 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Guangzhou Easy EAI Technology Co., Ltd.
+ *
+ */
+
+/ {
+	vcc_mipi: vcc-mipi {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&cam_en>;
+		gpio = <&gpio2 RK_PA0 GPIO_ACTIVE_HIGH>;
+		regulator-name = "vcc_mipi";
+		enable-active-high;
+	};
+};
+
+&csi_dphy0 {
+	status = "disabled";
+	ports {
+		port@0 {
+			mipi_in_ucam0: endpoint@1 {
+				/delete-property/ remote-endpoint;
+			};
+		};
+		port@1 {
+			csidphy0_out: endpoint@0 {
+				/delete-property/ remote-endpoint;
+			};
+		};
+	};
+};
+
+&csi_dphy1 {
+	status = "okay";
+	ports {
+		port@0 {
+			csi_dphy1_input: endpoint@1 {
+				remote-endpoint = <&ucam_out1>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+		port@1 {
+			csi_dphy1_output: endpoint@0 {
+				remote-endpoint = <&isp_in>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <100000>;
+	/delete-node/ ar0230@10;
+	/delete-node/ ov4689@36;
+	/delete-node/ os04a10@36;
+
+	imx415: imx415@36 {
+		compatible = "sony,imx415";
+		reg = <0x36>;
+        
+		clocks = <&cru CLK_MIPICSI_OUT>;
+		clock-names = "xvclk";
+        
+		power-domains = <&power RV1126_PD_VI>;
+		pinctrl-names = "rockchip,camera_default";
+		pinctrl-0 = <&mipicsi_clk1 &csi1_pwdn &csi1_rst>;
+		//power-gpios = <&gpio2 RK_PA0 GPIO_ACTIVE_HIGH>;
+		pwdn-gpios = <&gpio1 RK_PD6 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&gpio1 RK_PD7 GPIO_ACTIVE_LOW>;
+        
+		avdd-supply = <&vcc_mipi>;
+		dovdd-supply = <&vcc_mipi>;
+		dvdd-supply = <&vcc_mipi>;
+        
+		rockchip,camera-module-index = <0>;
+		rockchip,camera-module-facing = "front";
+		rockchip,camera-module-name = "YT10092";
+		rockchip,camera-module-lens-name = "IR0147-36IRC-8M-F20";
+		// NO_HDR:0 HDR_X2:5 HDR_X3:6
+		rockchip,camera-hdr-mode = <0>;
+		port {
+			ucam_out1: endpoint {
+				remote-endpoint = <&csi_dphy1_input>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+	};
+};
+
+/* isp cma buffer don't fiddle with it, dual camera(3840 * 2160) need 256M buffer */
+&isp_reserved {
+	size = <0x10000000>;
+};
+
+&mipi_csi2 {
+	status = "disabled";
+	ports {
+		port@0 {
+			mipi_csi2_input: endpoint@1 {
+				/delete-property/ remote-endpoint;
+			};
+		};
+
+		port@1 {
+			mipi_csi2_output: endpoint@0 {
+				/delete-property/ remote-endpoint;
+			};
+		};
+	};
+};
+
+&pinctrl {
+	mipi-csi {
+		/omit-if-no-ref/
+		cam_en: cam-en {
+			rockchip,pins = <2 RK_PA0 RK_FUNC_GPIO &pcfg_output_low>;
+		};
+        
+		/omit-if-no-ref/
+		csi0_rst: csi0-rst {
+			rockchip,pins = <1 RK_PD5 RK_FUNC_GPIO &pcfg_output_low>;
+		};
+		/omit-if-no-ref/
+		csi0_pwdn: csi0-pwdn {
+			rockchip,pins = <1 RK_PD4 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+		/omit-if-no-ref/
+		csi1_rst: csi1-rst {
+			rockchip,pins = <1 RK_PD7 RK_FUNC_GPIO &pcfg_output_low>;
+		};
+		/omit-if-no-ref/
+		csi1_pwdn: csi1-pwdn {
+			rockchip,pins = <1 RK_PD6 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+};
+
+&rk809 {
+	regulators {
+		vcc_dvdd: LDO_REG6 {
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1200000>;
+		};
+
+		vcc_avdd: LDO_REG7 {
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+		};
+	};
+};
+
+&rkcif_mipi_lvds {
+	status = "disabled";
+	port {
+		cif_mipi_in: endpoint {
+			/delete-property/ remote-endpoint;
+		};
+	};
+};
+
+&rkcif_mipi_lvds_sditf {
+	status = "disabled";
+
+	port {
+		cif_sditf: endpoint {
+			/delete-property/ remote-endpoint;
+		};
+	};
+};
+
+&rkisp {
+	status = "okay";
+};
+
+&rkisp_vir0 {
+	status = "okay";
+
+	ports {
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			isp_in: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&csi_dphy1_output>;
+			};
+		};
+	};
+};
+
+&rkisp_vir1 {
+	status = "disabled";
+	ports {
+		port@0 {
+			isp_virt1_in: endpoint@0 {
+				/delete-property/ remote-endpoint;
+			};
+		};
+	};
+};
+
+&rkisp_mmu {
+	status = "disabled";
+};
+
+&rkispp {
+	status = "okay";
+};
+
+&rkispp_vir0 {
+	status = "okay";
+};
+
+&rkispp_vir1 {
+	status = "disabled";
+};
+
+&rkispp_mmu {
+	status = "okay";
+};

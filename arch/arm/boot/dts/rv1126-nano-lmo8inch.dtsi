@@ -1,0 +1,330 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Guangzhou Easy EAI Technology Co., Ltd.
+ *
+ */
+
+/ {
+	/delete-node/ vcc18-lcd-n;
+};
+
+&backlight {
+	pwms = <&pwm8 0 25000 0>;
+	default-brightness-level = <255>;
+};
+
+&display_subsystem {
+	status = "okay";
+};
+
+&dsi {
+	status = "okay";
+
+	/delete-property/ rockchip,lane-rate;
+	/delete-node/ panel@0;
+	panel@0 {
+		pinctrl-names = "default";
+		pinctrl-0 = <&rst_lcd>;
+		compatible = "ilitek,ili9881d", "simple-panel-dsi";
+		reg = <0>;
+		backlight = <&backlight>;
+		reset-gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;
+		prepare-delay-ms = <5>;
+		reset-delay-ms = <1>;
+		init-delay-ms = <80>;
+
+		width-mm = <107>;
+		height-mm = <172>;
+
+		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
+			      MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_EOT_PACKET)>;
+		dsi,format = <MIPI_DSI_FMT_RGB888>;
+		dsi,lanes = <4>;
+
+		panel-init-sequence = [
+			39 00 04 FF 98 81 03
+			15 00 02 01 00
+			15 00 02 02 00
+			15 00 02 03 73
+			15 00 02 04 00
+			15 00 02 05 00
+			15 00 02 06 08
+			15 00 02 07 00
+			15 00 02 08 00
+			15 00 02 09 00
+			15 00 02 0A 01
+			15 00 02 0B 01
+			15 00 02 0C 00
+			15 00 02 0D 01
+			15 00 02 0E 01
+			15 00 02 0F 00
+			15 00 02 10 00
+			15 00 02 11 00
+			15 00 02 12 00
+			15 00 02 13 1F
+			15 00 02 14 1F
+			15 00 02 15 00
+			15 00 02 16 00
+			15 00 02 17 00
+			15 00 02 18 00
+			15 00 02 19 00
+			15 00 02 1A 00
+			15 00 02 1B 00
+			15 00 02 1C 00
+			15 00 02 1D 00
+			15 00 02 1E 40
+			15 00 02 1F C0
+			15 00 02 20 06
+			15 00 02 21 01
+			15 00 02 22 06
+			15 00 02 23 01
+			15 00 02 24 88
+			15 00 02 25 88
+			15 00 02 26 00
+			15 00 02 27 00
+			15 00 02 28 3B
+			15 00 02 29 03
+			15 00 02 2A 00
+			15 00 02 2B 00
+			15 00 02 2C 00
+			15 00 02 2D 00
+			15 00 02 2E 00
+			15 00 02 2F 00
+			15 00 02 30 00
+			15 00 02 31 00
+			15 00 02 32 00
+			15 00 02 33 00
+			15 00 02 34 00
+			15 00 02 35 00
+			15 00 02 36 00
+			15 00 02 37 00
+			15 00 02 38 00
+			15 00 02 39 00
+			15 00 02 3A 00
+			15 00 02 3B 00
+			15 00 02 3C 00
+			15 00 02 3D 00
+			15 00 02 3E 00
+			15 00 02 3F 00
+			15 00 02 40 00
+			15 00 02 41 00
+			15 00 02 42 00
+			15 00 02 43 00
+			15 00 02 44 00
+			15 00 02 50 01
+			15 00 02 51 23
+			15 00 02 52 45
+			15 00 02 53 67
+			15 00 02 54 89
+			15 00 02 55 AB
+			15 00 02 56 01
+			15 00 02 57 23
+			15 00 02 58 45
+			15 00 02 59 67
+			15 00 02 5A 89
+			15 00 02 5B AB
+			15 00 02 5C CD
+			15 00 02 5D EF
+			15 00 02 5E 00
+			15 00 02 5F 01
+			15 00 02 60 01
+			15 00 02 61 06
+			15 00 02 62 06
+			15 00 02 63 07
+			15 00 02 64 07
+			15 00 02 65 00
+			15 00 02 66 00
+			15 00 02 67 02
+			15 00 02 68 02
+			15 00 02 69 05
+			15 00 02 6A 05
+			15 00 02 6B 02
+			15 00 02 6C 0D
+			15 00 02 6D 0D
+			15 00 02 6E 0C
+			15 00 02 6F 0C
+			15 00 02 70 0F
+			15 00 02 71 0F
+			15 00 02 72 0E
+			15 00 02 73 0E
+			15 00 02 74 02
+			15 00 02 75 01
+			15 00 02 76 01
+			15 00 02 77 06
+			15 00 02 78 06
+			15 00 02 79 07
+			15 00 02 7A 07
+			15 00 02 7B 00
+			15 00 02 7C 00
+			15 00 02 7D 02
+			15 00 02 7E 02
+			15 00 02 7F 05
+			15 00 02 80 05
+			15 00 02 81 02
+			15 00 02 82 0D
+			15 00 02 83 0D
+			15 00 02 84 0C
+			15 00 02 85 0C
+			15 00 02 86 0F
+			15 00 02 87 0F
+			15 00 02 88 0E
+			15 00 02 89 0E
+			15 00 02 8A 02
+			39 00 04 FF 98 81 04
+			15 00 02 6C 15
+			15 00 02 6E 2A
+			15 00 02 6F 33
+			15 00 02 8D 1B
+			15 00 02 87 BA
+			15 00 02 3A 24
+			15 00 02 26 76
+			15 00 02 B2 D1
+			39 00 04 FF 98 81 01
+			15 00 02 22 0A
+			15 00 02 31 00
+			15 00 02 43 66
+			15 00 02 53 42
+			15 00 02 50 87
+			15 00 02 51 82
+			15 00 02 60 15
+			15 00 02 61 01
+			15 00 02 62 0C
+			15 00 02 63 00
+			15 00 02 A0 00
+			15 00 02 A1 13
+			15 00 02 A2 23
+			15 00 02 A3 14
+			15 00 02 A4 16
+			15 00 02 A5 29
+			15 00 02 A6 1E
+			15 00 02 A7 1D
+			15 00 02 A8 86
+			15 00 02 A9 1E
+			15 00 02 AA 29
+			15 00 02 AB 74
+			15 00 02 AC 19
+			15 00 02 AD 17
+			15 00 02 AE 4B
+			15 00 02 AF 20
+			15 00 02 B0 26
+			15 00 02 B1 4C
+			15 00 02 B2 5D
+			15 00 02 B3 3F
+			15 00 02 C0 00
+			15 00 02 C1 13
+			15 00 02 C2 23
+			15 00 02 C3 14
+			15 00 02 C4 16
+			15 00 02 C5 29
+			15 00 02 C6 1E
+			15 00 02 C7 1D
+			15 00 02 C8 86
+			15 00 02 C9 1E
+			15 00 02 CA 29
+			15 00 02 CB 74
+			15 00 02 CC 19
+			15 00 02 CD 17
+			15 00 02 CE 4B
+			15 00 02 CF 20
+			15 00 02 D0 26
+			15 00 02 D1 4C
+			15 00 02 D2 5D
+			15 00 02 D3 3F
+			39 00 04 FF 98 81 00
+			15 00 02 35 00
+			05 78 01 11
+			05 14 01 29
+		];
+
+		panel-exit-sequence = [
+			15 00 02 28 00
+			15 00 02 10 00
+		];
+
+		display-timings {
+			native-mode = <&timing0>;
+
+			timing0: timing0 {
+				clock-frequency = <68220000>;
+				hactive = <800>;
+				vactive = <1280>;
+				hfront-porch = <20>;
+				hsync-len = <20>;
+				hback-porch = <20>;
+				vfront-porch = <30>;
+				vsync-len = <4>;
+				vback-porch = <8>;
+				hsync-active = <0>;
+				vsync-active = <0>;
+				de-active = <0>;
+				pixelclk-active = <0>;
+			};
+		};
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				panel_in_dsi: endpoint {
+					remote-endpoint = <&dsi_out_panel>;
+				};
+			};
+		};
+	}; //panel
+}; //dsi
+
+&i2c5 {
+	status = "okay";
+	pinctrl-0 = <&i2c5m1_xfer>;
+	/delete-node/ gt1x@14;
+
+	gt911@14 {
+		pinctrl-names = "default";
+		pinctrl-0 = <&tp_rst &tp_int>;
+		compatible = "goodix,gt911";
+		reg = <0x14>;
+		interrupt-parent = <&gpio3>;
+		interrupts = <RK_PC1 0>;
+
+		irq-gpios = <&gpio3 RK_PC1 0>;
+		reset-gpios = <&gpio3 RK_PC3 0>;
+	};
+};
+
+&pinctrl {
+	mipi-dsi {
+		/omit-if-no-ref/
+		rst_lcd: rst-lcd {
+			rockchip,pins =
+				<3 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+	touch-screen {
+		/omit-if-no-ref/
+		tp_rst: tp_rst {
+			rockchip,pins =
+				<3 RK_PC3 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+		/omit-if-no-ref/
+		tp_int: tp_int {
+			rockchip,pins =
+				<3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+};
+
+/* use for bl in evb v10 but not nano. */
+&pwm3 {
+	status = "disabled";
+};
+
+&pwm8 {
+	status = "okay";
+	pinctrl-0 = <&pwm8m1_pins>;
+};
+
+&route_dsi {
+	status = "okay";
+};

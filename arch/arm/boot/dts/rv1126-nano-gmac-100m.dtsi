@@ -1,0 +1,41 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2024 Guangzhou EASY EAI Technology Co., Ltd.
+ */
+
+&gmac {
+	phy-mode = "rmii";
+	clock_in_out = "output";
+
+	snps,reset-gpio = <&gpio2 RK_PA5 GPIO_ACTIVE_LOW>;
+	snps,reset-active-low;
+	snps,reset-delays-us = <0 50000 10000>;
+
+	assigned-clocks = <&cru CLK_GMAC_SRC>, <&cru CLK_GMAC_TX_RX>;
+	assigned-clock-parents = <&cru CLK_GMAC_SRC_M1>, <&cru RMII_MODE_CLK>;
+	assigned-clock-rates = <50000000>;
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&rmiim1_miim &rgmiim1_rxer &rmiim1_bus2 &rgmiim1_mclkinout_level0 &phy_rst>;
+
+	phy-handle = <&phy>;
+	status = "okay";
+};
+
+&mdio {
+	phy: phy@1 {
+		//compatible = "ethernet-phy-ieee802.3-c22";
+		compatible = "ethernet-phy-id001c.c816";
+		reg = <0x1>;
+	};
+};
+
+&pinctrl {
+	ethernet {
+		/omit-if-no-ref/
+		phy_rst: phy-rst {
+			rockchip,pins =
+				<2 RK_PA5 RK_FUNC_GPIO &pcfg_output_low>;
+		};
+	};
+};

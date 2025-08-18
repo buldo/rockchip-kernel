@@ -1,0 +1,52 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2024 Guangzhou EASY EAI Technology Co., Ltd.
+ */
+
+&gmac {
+	phy-mode = "rgmii";
+	clock_in_out = "input";
+
+	snps,reset-gpio = <&gpio2 RK_PA5 GPIO_ACTIVE_LOW>;
+	snps,reset-active-low;
+	/* Reset time is 20ms, 100ms for rtl8211f */
+	snps,reset-delays-us = <0 20000 100000>;
+
+	assigned-clocks = <&cru CLK_GMAC_SRC>, <&cru CLK_GMAC_TX_RX>, <&cru CLK_GMAC_ETHERNET_OUT>;
+	assigned-clock-parents = <&cru CLK_GMAC_SRC_M1>, <&cru RGMII_MODE_CLK>;
+	assigned-clock-rates = <125000000>, <0>, <25000000>;
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&rgmiim1_miim &rgmiim1_bus2 &rgmiim1_bus4 &rgmiim1_mclkinout &phy_rst>;
+
+	tx_delay = <0x2a>;
+	rx_delay = <0x1a>;
+
+	phy-handle = <&phy>;
+	status = "okay";
+};
+
+&mdio {
+	phy: phy@4 {
+		compatible = "ethernet-phy-ieee802.3-c22";
+		reg = <0x4>;
+	};
+};
+
+&pinctrl {
+	ethernet {
+		/omit-if-no-ref/
+		phy_rst: phy-rst {
+			rockchip,pins =
+				<2 RK_PA5 RK_FUNC_GPIO &pcfg_output_low>;
+		};
+	};
+	rgmii {
+		/omit-if-no-ref/
+		rgmiim1_mclkinout: rgmiim1-mclkinout {
+			rockchip,pins =
+				/* rgmii_clk_m1 */
+				<2 RK_PB7 0 &pcfg_pull_none>;
+		};
+	};
+};

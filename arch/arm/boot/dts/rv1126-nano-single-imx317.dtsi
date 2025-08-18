@@ -1,0 +1,207 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Guangzhou Easy EAI Technology Co., Ltd.
+ *
+ */
+
+&csi_dphy0 {
+	status = "okay";
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi_in_ucam0: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&ucam_out0>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			csidphy0_out: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&mipi_csi2_input>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+	imx317: imx317@1a {
+		compatible = "sony,imx317";
+		reg = <0x1a>;
+
+		clocks = <&cru CLK_MIPICSI_OUT>;
+		clock-names = "xvclk";
+
+		power-domains = <&power RV1126_PD_VI>;
+		pinctrl-names = "rockchip,camera_default";
+		pinctrl-0 = <&mipicsi_clk0 &csi1_pwdn &csi0_pwdn>;
+
+		pwdn-gpios = <&gpio1 RK_PD4 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&gpio1 RK_PD6 GPIO_ACTIVE_HIGH>;
+
+		dovdd-supply = <&vcc_dovdd>;
+
+		rockchip,camera-module-index = <0>;
+		rockchip,camera-module-facing = "front";
+		rockchip,camera-module-name = "default";
+		rockchip,camera-module-lens-name = "default";
+		port {
+			ucam_out0: endpoint {
+				remote-endpoint = <&mipi_in_ucam0>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+	};
+};
+
+&mipi_csi2 {
+	status = "okay";
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi_csi2_input: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&csidphy0_out>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi_csi2_output: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&cif_mipi_in>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+	};
+};
+
+&pinctrl {
+	mipi-csi {
+		/omit-if-no-ref/
+		csi0_rst: csi0_rst {
+			rockchip,pins =
+				<1 RK_PD5 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+
+		/omit-if-no-ref/
+		csi0_pwdn: csi0_pwdn {
+			rockchip,pins =
+				<1 RK_PD4 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+
+		/omit-if-no-ref/
+		csi0_pwr: csi0_pwr {
+			rockchip,pins =
+				<2 RK_PA0 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+
+		/omit-if-no-ref/
+		ir_led_io: ir-led-io {
+			rockchip,pins =
+				<2 RK_PA4 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+
+		/omit-if-no-ref/
+		csi1_rst: csi1_rst {
+			rockchip,pins =
+				<1 RK_PD7 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+
+		/omit-if-no-ref/
+		csi1_pwdn: csi1_pwdn {
+			rockchip,pins =
+				<1 RK_PD6 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+};
+
+&rkisp {
+	status = "okay";
+};
+
+&rkisp_vir0 {
+	status = "okay";
+
+	ports {
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			isp_in: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&cif_sditf>;
+			};
+		};
+	};
+};
+
+&rkisp_mmu {
+	status = "disabled";
+};
+
+&rkcif {
+	status = "okay";
+};
+
+&rkcif_mmu {
+	status = "disabled";
+};
+
+&rkcif_mipi_lvds {
+	status = "okay";
+	port {
+		cif_mipi_in: endpoint {
+			remote-endpoint = <&mipi_csi2_output>;
+			data-lanes = <1 2 3 4>;
+		};
+	};
+};
+
+&rkcif_mipi_lvds_sditf {
+	status = "okay";
+
+	port {
+		cif_sditf: endpoint {
+			remote-endpoint = <&isp_in>;
+			data-lanes = <1 2 3 4>;
+		};
+	};
+};
+
+&rkispp {
+	status = "okay";
+};
+
+&rkispp_vir0 {
+	status = "okay";
+};
+
+&rkispp_mmu {
+	status = "okay";
+};
